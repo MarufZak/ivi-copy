@@ -4,10 +4,6 @@ import Slide from "./Slide";
 import useGlobalContext from "../../hooks/useGlobalContext";
 import Icon from "../core/Icon";
 
-const getRandomNumber = (min, max) => {
-  return Math.floor(Math.random() * (max - min) + min);
-};
-
 const Intro = () => {
   const { state } = useGlobalContext();
 
@@ -27,7 +23,7 @@ const Intro = () => {
       }}
     >
       <SplideTrack>
-        {state.popularMovies?.slice(3, 6).map((movie) => (
+        {state.popularMovies.movies?.slice(3, 6).map((movie) => (
           <Slide key={movie.id} {...movie} />
         ))}
       </SplideTrack>

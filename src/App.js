@@ -1,13 +1,25 @@
+import { Route, Routes } from "react-router-dom";
 import Header from "./components/Header/Header";
 import Intro from "./components/Intro/Intro";
-import Popular from "./components/Popular/Popular";
+import SingleMovie from "./components/SingleMovie";
+import Tracks from "./components/Tracks";
 
 const App = () => {
   return (
     <>
-      <Header />
-      <Intro />
-      <Popular/>
+      <Routes>
+        <Route
+          path="/"
+          element={
+            <>
+              <Header />
+              <Intro />
+              <Tracks />
+            </>
+          }
+        />
+        <Route path="movie/:movieId" element={<SingleMovie/>} />
+      </Routes>
     </>
   );
 };
