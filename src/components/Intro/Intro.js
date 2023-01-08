@@ -3,9 +3,14 @@ import { Splide, SplideTrack } from "@splidejs/react-splide";
 import Slide from "./Slide";
 import useGlobalContext from "../../hooks/useGlobalContext";
 import Icon from "../core/Icon";
+import Loading from '../core/Loading';
 
 const Intro = () => {
   const { state } = useGlobalContext();
+
+  if (state.popularMovies.isLoading || state.ratedMovies.isLoading || state.trendMovies.isLoading) {
+    return <Loading/>
+  }
 
   return (
     <Splide

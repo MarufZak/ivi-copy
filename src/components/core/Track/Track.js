@@ -6,27 +6,20 @@ import useGlobalContext from "../../../hooks/useGlobalContext";
 import { useState, useEffect } from "react";
 
 const Track = ({ title, movies, type }) => {
-  const [error,setError] = useState({state:false,msg:''});
+  const [error, setError] = useState({ state: false, msg: "" });
   const { state } = useGlobalContext();
 
-  useEffect(()=>{
+  useEffect(() => {
     if (state[type].error.state === true) {
-      setError({state: true,msg: state[type].error.msg}); 
-      console.log('entered!');
+      setError({ state: true, msg: state[type].error.msg });
     }
-  },[state[type].error.state])
-
-
-  if (state[type].isLoading) {
-    return <h2>Loading...</h2>
-  }
-
+  }, [state[type].error.state]);
 
   return (
     <div className="track">
       {error.state && <h2>Error: {error.msg}</h2>}
       <header className="track__header">
-        <h2 className="track__title">{title}</h2>
+        <h2 className="track__title">{movies?.length>0 && title}</h2>
       </header>
       <Splide
         className="track__slider"

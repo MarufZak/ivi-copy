@@ -1,14 +1,6 @@
-import { createContext, useEffect, useReducer } from "react";
-import axios from "axios";
-// 903ec37228132dd7bac42a4df3559321
-const popularMoviesUrl =
-  "https://api.themoviedb.org/3/movie/popular?api_key=903ec37228132dd7bac42a4df3559321&language=en-US&page=1";
-const ratedMoviesUrl =
-  "https://api.themoviedb.org/3/movie/top_rated?api_key=903ec37228132dd7bac42a4df3559321&language=en-US&page=1";
-const trendMoviesUrl =
-  "https://api.themoviedb.org/3/trending/movie/week?api_key=903ec37228132dd7bac42a4df3559321";
+import { createContext, useContext } from "react";
 
-export const AppProvider = createContext();
+const TrackContext = createContext();
 
 const initialState = {
   popularMovies: {
@@ -25,12 +17,6 @@ const initialState = {
     error: { state: false, msg: "" },
     movies: [],
     isLoading: false,
-  },
-  singleMovie: {
-    error: { state: false, msg: "" },
-    movie: {},
-    isLoading: false,
-    reviews: []
   },
 };
 
@@ -161,57 +147,10 @@ const reducer = (state, action) => {
       trendMovies: { ...state.trendMovies, movies: action.payload },
     };
   }
-  if (action.type === "SINGLE_MOVIE_LOADING_TRUE") {
-    return {
-      ...state,
-      singleMovie: {
-        ...state.singleMovie,
-        isLoading: true,
-        movie: []
-      },
-    };
-  }
-  if (action.type === "SINGLE_MOVIE_LOADING_FALSE") {
-    return {
-      ...state,
-      singleMovie: {
-        ...state.singleMovie,
-        isLoading: false,
-      },
-    };
-  }
-  if (action.type === "SINGLE_MOVIE_ERROR_TRUE") {
-    return {
-      ...state,
-      singleMovie: {
-        ...state.singleMovie,
-        error: { state: true, msg: action.payload },
-      },
-    };
-  }
-  if (action.type === "SINGLE_MOVIE_ERROR_FALSE") {
-    return {
-      ...state,
-      singleMovie: {
-        ...state.singleMovie,
-        error: { state: false, msg: "" },
-      },
-    };
-  }
-  if (action.type === "DISPLAY_SINGLE_MOVIE") {
-    return {
-      ...state,
-      singleMovie: {
-        ...state.singleMovie,
-        movie: action.payload,
-      },
-    };
-  }
 };
 
-const AppContext = ({ children }) => {
+const TrackProvider = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
-
   const fetchPopular = async (url) => {
     dispatch({ type: "POPULAR_LOADING_TRUE" });
     dispatch({ type: "POPULAR_ERROR_FALSE" });
@@ -260,39 +199,17 @@ const AppContext = ({ children }) => {
     dispatch({ type: "TREND_LOADING_FALSE" });
   };
 
-  const fetchSingleMovie = async (id) => {
-    dispatch({ type: "SINGLE_MOVIE_LOADING_TRUE" });
-    dispatch({ type: "SINGLE_MOVIE_ERROR_FALSE" });
-
-    try {
-      const response = await axios(`https://api.themoviedb.org/3/movie/${id}?api_key=903ec37228132dd7bac42a4df3559321&language=en-US`);
-      const data = response.data;
-
-      const similarMoviesResponse = await axios(`https://api.themoviedb.org/3/movie/${id}/similar?api_key=903ec37228132dd7bac42a4df3559321&language=en-US&page=1`);
-      const similarMovies = similarMoviesResponse.data.results;
-
-      const reviewsResponse = await axios(`https://api.themoviedb.org/3/movie/${id}/reviews?api_key=903ec37228132dd7bac42a4df3559321&language=en-US&page=1`);
-      const reviews = reviewsResponse.data.results;
-
-      dispatch({ type: "DISPLAY_SINGLE_MOVIE", payload: {...data,similarMovies,reviews} });
-    } catch (error) {
-      dispatch({ type: "SINGLE_MOVIE_ERROR_TRUE", payload: error.code });
-    }
-
-    dispatch({ type: "SINGLE_MOVIE_LOADING_FALSE" });
-  };
-
   useEffect(() => {
     fetchPopular(popularMoviesUrl);
     fetchRated(ratedMoviesUrl);
     fetchTrend(trendMoviesUrl);
   }, []);
 
-  return (
-    <AppProvider.Provider value={{ state, dispatch, fetchSingleMovie }}>
-      {children}
-    </AppProvider.Provider>
-  );
+  return <div>TrackProvider</div>;
 };
 
-export default AppContext;
+export const useTrackContext = () => {
+  return useContext(TrackContext);
+};
+
+export default TrackProvider;
