@@ -24,6 +24,10 @@ body {
   font-size: 1.6rem;
 }
 
+body.lock {
+  overflow: hidden;
+}
+
 :root {
   --color-body: rgb(16, 13, 25);
   --color-white: #fff;
@@ -34,6 +38,7 @@ body {
   --color-red: hsl(344deg 100% 46%);
   --color-purple: hsl(254deg 23% 18%);
   --color-black-800: rgb(0,0,0,0.8);
+  --color-black-950: rgb(0,0,0,0.95);
   --color-black-300: rgb(0,0,0,0.3);
 
   --color-green: hsl(85deg 55% 41%);
@@ -58,6 +63,12 @@ button {
   cursor: pointer;
 }
 
+button:focus,
+button:focus-visible {
+  /* remove styles from splide.css */
+  outline: 0 !important;
+}
+
 svg {
   width: 16px;
   height: 16px;
@@ -71,6 +82,7 @@ svg {
   width: 100%;
   padding: 0 15px;
   margin: 0 auto;
+  overflow: hidden;
 }
 
 

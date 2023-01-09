@@ -1,13 +1,14 @@
-import Track from "./core/Track/Track";
-import useGlobalContext from "../hooks/useGlobalContext";
+import classes from "./Content.module.css";
+import useGlobalContext from "../../../hooks/useGlobalContext";
+import Track from "../../core/Track/Track";
 
-const Tracks = () => {
+const Content = () => {
   const { state } = useGlobalContext();
 
   return (
-    <div className="tracks">
+    <div className={classes.content}>
       <div className="container">
-        <div className="tracks__body">
+        <div className={classes.content__body}>
           <Track
             type="popularMovies"
             movies={state.popularMovies.movies}
@@ -29,4 +30,4 @@ const Tracks = () => {
   );
 };
 
-export default Tracks;
+export default Content;

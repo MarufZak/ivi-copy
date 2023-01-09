@@ -1,30 +1,31 @@
-import "../../../styles/reviews.css";
 import { Splide, SplideSlide, SplideTrack } from "@splidejs/react-splide";
-import Review from "./Review";
 import Icon from "../../core/Icon";
+import classes from './Reviews.module.css';
+import Review from './Review/Review';
 
 const Reviews = ({ reviews }) => {
-  console.log(reviews);
   return (
-    <div className="reviews">
-      <header className="reviews__header">
-        <h2 className="reviews__title">{reviews?.length>0 ? 'Отзывы': 'Нет отзывов'}</h2>
+    <div className={classes.reviews}>
+      <header className={classes.header}>
+        <h2 className={classes.title}>
+          {reviews?.length > 0 ? "Отзывы" : "Нет отзывов"}
+        </h2>
       </header>
       <Splide
-        className="reviews__slider"
+        className={classes.slider}
         options={{
           perPage: 4,
           gap: 24,
           pagination: false,
           breakpoints: {
-            992: {
-              perPage: 4,
-            },
-            578: {
+            1280: {
               perPage: 3,
             },
-            360: {
+            950: {
               perPage: 2,
+            },
+            700: {
+              perPage: 1,
             },
           },
         }}
@@ -32,19 +33,21 @@ const Reviews = ({ reviews }) => {
       >
         <SplideTrack>
           {reviews?.map((review) => (
-            <SplideSlide className="reviews__slide">
+            <SplideSlide>
               <Review {...review} />
             </SplideSlide>
           ))}
         </SplideTrack>
-        <div className="splide__arrows">
-          <button className="splide__arrow splide__arrow--prev reviews__slider-arrow">
-            <Icon>arrow</Icon>
-          </button>
-          <button className="splide__arrow splide__arrow--next reviews__slider-arrow">
-            <Icon>arrow</Icon>
-          </button>
-        </div>
+        {reviews?.length > 0 && (
+          <div className={`splide__arrows ${classes.slider__arrows}`}>
+            <button className={`splide__arrow--prev ${classes.slider__arrow}`}>
+              <Icon>arrow</Icon>
+            </button>
+            <button className={`splide__arrow--next ${classes.slider__arrow}`}>
+              <Icon>arrow</Icon>
+            </button>
+          </div>
+        )}
       </Splide>
     </div>
   );

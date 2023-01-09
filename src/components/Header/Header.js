@@ -1,18 +1,25 @@
-import '../../styles/header.css';
-import Logo from '../core/Logo';
-import HeaderList from './List';
-import HeaderProfile from './Profile';
+import Logo from "../core/Logo";
+import HeaderProvider from "../../context/HeaderContext";
+import List from './List/List';
+import Search from './Search/Search';
+import classes from './Header.module.css';
 
 const Header = () => {
-  return <header className="header">
-    <div className="container">
-        <nav className="header__nav">
+
+
+  return (
+    <HeaderProvider>
+      <header className={classes.header}>
+        <div className="container">
+          <nav className={classes.nav}>
             <Logo />
-            <HeaderList/>
-            <HeaderProfile/>
-        </nav>
-    </div>
-  </header>
-}
+            <List />
+            <Search />
+          </nav>
+        </div>
+      </header>
+    </HeaderProvider>
+  );
+};
 
 export default Header;

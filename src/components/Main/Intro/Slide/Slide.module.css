@@ -1,6 +1,4 @@
-
-
-.intro__slide {
+.slide {
     opacity: 0.5;
     transition: 0.5s;
     border-radius: 24px;
@@ -8,11 +6,11 @@
     position: relative;
 }
 
-.intro__slide.is-active {
+.slide.is-active {
     opacity: 1;
 }
 
-.intro__slide-img{
+.img {
     position: absolute;
     top: 0;
     left: 0;
@@ -24,7 +22,7 @@
 }
 
 
-.intro__slide-info {
+.info {
     position: absolute;
     padding: 40px 20px;
 
@@ -33,24 +31,6 @@
     z-index: 1;
 }
 
-.intro__slide-title {
+.title {
     margin-bottom: 20px;
-}
-
-
-.intro__slider-arrow {
-    background: none;
-}
-.intro__slider-arrow svg {
-    fill: var(--color-gray);
-    width: 4rem;
-    height: 4rem;
-}
-
-.intro__slider-arrow:first-of-type {
-    left: clamp(10px,2.6vw, 50px);
-}
-
-.intro__slider-arrow:last-of-type {
-    right: clamp(10px,2.6vw, 50px);
 }

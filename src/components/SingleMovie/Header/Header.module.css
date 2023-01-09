@@ -1,0 +1,25 @@
+.header {
+  display: flex;
+  justify-content: space-between;
+  padding: 20px 0;
+  border-top: 1px solid var(--color-green);
+}
+
+.genres {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.genre {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+.genre:not(:last-child)::after {
+  content: "";
+  width: 3px;
+  height: 3px;
+  background: var(--color-gray);
+  display: inline-block;
+}

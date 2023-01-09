@@ -1,4 +1,8 @@
-.card-small__img {
+.card {
+  width: 150px;
+}
+
+.img {
   height: 230px;
   border-radius: 10px;
   position: relative;
@@ -7,7 +11,7 @@
   cursor: pointer;
 }
 
-.card-small__img img {
+.img img {
   display: block;
   position: absolute;
   top: 0;
@@ -17,7 +21,7 @@
   object-fit: cover;
 }
 
-.card-small__content {
+.content {
   position: absolute;
   top: 0;
   left: 0;
@@ -33,13 +37,17 @@
   padding: 10px 20px;
 }
 
-.card-small:hover .card-small__content {
+.card:hover .content {
   opacity: 1;
 }
 
-.card-small__title {
+.title {
   width: 100%;
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
+}
+
+.link {
+  
 }

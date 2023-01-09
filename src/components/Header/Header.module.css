@@ -1,0 +1,16 @@
+.header {
+  padding: 10px 0;
+}
+
+.nav {
+  display: grid;
+  grid-template-columns: max-content 1fr max-content;
+  align-items: center;
+  column-gap: 3rem;
+}
+
+@media screen and (max-width: 576px) {
+  .nav {
+    column-gap: 0;
+  }
+}
