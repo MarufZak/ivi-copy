@@ -21,7 +21,7 @@ const Track = ({ title, movies, type }) => {
     <div className={classes.track}>
       {error.state && <h2>Error: {error.msg}</h2>}
       <header className={classes.header}>
-        <h2 className={classes.title}>{movies?.length>0}</h2>
+        <h2 className={classes.title}>{movies?.length>0 ? title : ''}</h2>
       </header>
       <Splide
         className={classes.slider}

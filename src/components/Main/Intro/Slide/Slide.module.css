@@ -10,6 +10,10 @@
     opacity: 1;
 }
 
+.body {
+    height: 100%;
+}
+
 .img {
     position: absolute;
     top: 0;
@@ -18,7 +22,6 @@
     height: 100%;
     object-fit: cover;
     object-position: center top;
-
 }
 
 

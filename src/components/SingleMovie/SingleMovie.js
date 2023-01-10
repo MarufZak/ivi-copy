@@ -3,10 +3,10 @@ import { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import Track from "../core/Track/Track";
 import Reviews from "./Reviews/Reviews";
-import Loading from "../core/Loading";
 import Header from "./Header/Header";
-import placeholderImage from "../../assets/images/placeholder.jpg";
+import Loading from '../core/Loading/Loading';
 import classes from "./SingleMovie.module.css";
+import Picture from "../core/Picture";
 
 const SingleMovie = () => {
   const { movieId } = useParams();
@@ -38,10 +38,8 @@ const SingleMovie = () => {
       <div className="container">
         <Header genres={genres}></Header>
         <div className={classes.body}>
-          <div className={classes.trailer}>
-            <div className={classes.img}>
-              {img ? (
-                <picture>
+          <div className={classes.img_block}>
+              <Picture>
                   <source
                     srcSet={`https://image.tmdb.org/t/p/original${img}`}
                     media="(min-width: 576px)"
@@ -50,15 +48,11 @@ const SingleMovie = () => {
                     srcSet={`https://image.tmdb.org/t/p/w500${img}`}
                     media="(max-width: 576px)"
                   />
-                  <img
+                  <img className={classes.img}
                     src={"https://image.tmdb.org/t/p/original" + img}
                     alt="trailer"
                   />
-                </picture>
-              ) : (
-                <img src={placeholderImage} alt="image is not available" />
-              )}
-            </div>
+              </Picture>
           </div>
           <div className={classes.content}>
             <h1 className={classes.title}>

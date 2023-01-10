@@ -1,6 +1,7 @@
 import classes from "./Content.module.css";
 import useGlobalContext from "../../../hooks/useGlobalContext";
 import Track from "../../core/Track/Track";
+import Skeleton, { SkeletonTheme } from 'react-loading-skeleton';
 
 const Content = () => {
   const { state } = useGlobalContext();

@@ -1,8 +1,7 @@
-import Logo from "../core/Logo";
 import HeaderProvider from "../../context/HeaderContext";
 import List from './List/List';
-import Search from './Search/Search';
 import classes from './Header.module.css';
+import Logo from '../core/Logo/Logo';
 
 const Header = () => {
 
@@ -14,7 +13,6 @@ const Header = () => {
           <nav className={classes.nav}>
             <Logo />
             <List />
-            <Search />
           </nav>
         </div>
       </header>

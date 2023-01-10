@@ -1,9 +1,0 @@
-.icon {
-    width: 3rem;
-    height: 3rem;    
-    cursor: pointer;
-}
-
-.icon:hover {
-  fill: var(--color-white);
-}

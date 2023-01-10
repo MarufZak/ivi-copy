@@ -2,7 +2,7 @@
   width: 150px;
 }
 
-.img {
+.img_block {
   height: 230px;
   border-radius: 10px;
   position: relative;
@@ -11,8 +11,7 @@
   cursor: pointer;
 }
 
-.img img {
-  display: block;
+.img {
   position: absolute;
   top: 0;
   left: 0;

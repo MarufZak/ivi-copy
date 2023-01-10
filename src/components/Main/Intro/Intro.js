@@ -2,8 +2,8 @@ import { Splide, SplideTrack } from "@splidejs/react-splide";
 import Slide from "./Slide/Slide";
 import useGlobalContext from "../../../hooks/useGlobalContext";
 import Icon from "../../core/Icon";
-import Loading from "../../core/Loading";
 import { useState } from 'react';
+import Loading from '../../core/Loading/Loading';
 import classes from "./Intro.module.css";;
 
 const Intro = () => {
@@ -35,7 +35,7 @@ const Intro = () => {
       }}
     >
       <SplideTrack>
-        {state.popularMovies.movies?.slice(3, 6).map((movie,index) => (
+        {state.popularMovies.movies?.slice(4, 7).map((movie,index) => (
           <Slide activeSlideIndex={activeSlideIndex} key={movie.id} index={index} {...movie} />
         ))}
       </SplideTrack>
