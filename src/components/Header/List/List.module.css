@@ -4,10 +4,10 @@
 }
 
 .item {
-    
+    padding: 25px 0;
 }
 
-.link:hover {
+.item:hover .link {
   color: var(--color-white);
 }
 

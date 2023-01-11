@@ -1,0 +1,19 @@
+.body {
+    background: url('../../../assets/images/error.png') top center / cover no-repeat;
+    height: 400px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border-top: 1px solid var(--color-white-150);
+}
+
+.title {
+    font-size: 4rem;
+    color: var(--color-white);
+    margin-bottom: 15px;
+}
+
+.desc {
+    margin-bottom: 20px;
+}

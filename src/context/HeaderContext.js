@@ -1,23 +1,13 @@
-import { createContext, useReducer } from "react";
-import axios from "axios";
+import { createContext, useEffect, useReducer } from "react";
+import useGlobalContext from '../hooks/useGlobalContext';
+
+// https://api.themoviedb.org/3/discover/movie?api_key=903ec37228132dd7bac42a4df3559321&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=1&with_genres=action&with_watch_monetization_types=flatrate
 
 export const HeaderContext = createContext();
 
 // 903ec37228132dd7bac42a4df3559321
 
 const reducer = (state, action) => {
-  if (action.type === "SEARCH_TRUE") {
-    return {
-      ...state,
-      isSearchActive: true,
-    };
-  }
-  if (action.type === "SEARCH_FALSE") {
-    return {
-      ...state,
-      isSearchActive: false,
-    };
-  }
   if (action.type === "QUERY_CHANGE") {
     return {
       ...state,
@@ -30,76 +20,60 @@ const reducer = (state, action) => {
       movies: action.payload,
     };
   }
-  if (action.type === "LOADING_TRUE") {
+  if (action.type === "POPUP_HIDE") {
     return {
       ...state,
-      isLoading: true,
-    };
+      isPopupActive: false
+    }
   }
-  if (action.type === "LOADING_FALSE") {
+  if (action.type === "POPUP_SHOW") {
     return {
       ...state,
-      isLoading: false,
-    };
-  }
-  if (action.type === "ERROR_TRUE") {
-    return {
-      ...state,
-      error: { state: true, msg: action.payload },
-    };
-  }
-  if (action.type === "ERROR_FALSE") {
-    return {
-      ...state,
-      error: { state: false, msg: "" },
-    };
+      isPopupActive: true
+    }
   }
 };
 
 const initialState = {
-  isSearchActive: false,
   query: "",
   page: 1,
   movies: [],
-  isLoading: false,
-  error: { state: false, msg: "" },
+  isPopupActive: false
 };
 
 const HeaderProvider = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
+  const {fetchData} = useGlobalContext();
 
-  const searchTrue = () => {
-    dispatch({ type: "SEARCH_TRUE" });
-  };
-  const searchFalse = () => {
-    dispatch({ type: "SEARCH_FALSE" });
-  };
+  const showPopup = ()=>{
+    document.body.classList.add('lock');
+    dispatch({type: "POPUP_SHOW"});
+  }
 
-  const fetchSearchMovies = async () => {
-    dispatch({ type: "LOADING_TRUE" });
-    dispatch({ type: "ERROR_FALSE" });
+  const hidePopup = ()=>{
+    document.body.classList.remove('lock');
+    dispatch({type: "POPUP_HIDE"});
+  }
 
-    try {
-      const response = await axios(
-        `https://api.themoviedb.org/3/search/movie?api_key=903ec37228132dd7bac42a4df3559321&language=en-US&query=${state.query}&page=${state.page}&include_adult=false`
-      );
-      const data = response.data.results;
-
-      dispatch({ type: "DISPLAY_MOVIES", payload: data });
-    } catch (error) {
-      dispatch({ type: "ERROR_TRUE", payload: error.code });
-    }
-
-    dispatch({ type: "LOADING_TRUE" });
-  };
+  const fetchSearchMovies = ()=>{
+    fetchData(`https://api.themoviedb.org/3/search/movie?api_key=903ec37228132dd7bac42a4df3559321&language=en-US&query=${state.query}&page=${state.page}`,dispatch,"DISPLAY_MOVIES");
+  }
 
   const queryChange = (query) => {
     dispatch({ type: "QUERY_CHANGE", payload: query });
   };
 
+  const value = {
+    state,
+    fetchSearchMovies,
+    queryChange,
+    showPopup,
+    hidePopup
+  }
+
   return (
     <HeaderContext.Provider
-      value={{ state, searchTrue,searchFalse, fetchSearchMovies, queryChange }}
+      value={value}
     >
       {children}
     </HeaderContext.Provider>

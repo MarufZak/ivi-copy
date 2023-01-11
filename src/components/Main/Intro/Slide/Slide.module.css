@@ -6,7 +6,7 @@
     position: relative;
 }
 
-.slide.is-active {
+.slide.isActive {
     opacity: 1;
 }
 

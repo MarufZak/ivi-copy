@@ -1,0 +1,30 @@
+.form {
+    position: relative;
+}
+
+.input {
+    width: 100%;
+    background: hsl(253deg 13% 86%);
+    border: none;
+    padding: 10px 15px;
+    border-radius: 10px;
+    color: hsl(253deg 26% 14%);
+    font-weight: 700;
+}
+
+.input:focus {
+    outline: none;
+}
+
+.icon {
+    position: absolute;
+    top: 50%;
+    right: 15px;
+    transform: translateY(-50%);
+    cursor: pointer;
+}
+
+.icon svg {
+    width: 2rem;
+    height: 2rem;
+}

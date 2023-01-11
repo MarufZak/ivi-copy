@@ -1,0 +1,14 @@
+.title {
+    color: var(--color-white);
+}
+
+
+.header {
+    margin-bottom: 20px;
+}
+
+.header.error {
+    padding: 15px 20px;
+    background: var(--color-red);
+    border-radius: 15px;
+}

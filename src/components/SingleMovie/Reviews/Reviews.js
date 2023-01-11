@@ -1,5 +1,5 @@
 import { Splide, SplideSlide, SplideTrack } from "@splidejs/react-splide";
-import Icon from "../../core/Icon";
+import {Icon} from "../../core";
 import classes from './Reviews.module.css';
 import Review from './Review/Review';
 

@@ -2,6 +2,8 @@ import { useContext } from 'react';
 import { HeaderContext } from '../context/HeaderContext';
 
 
-export const useHeaderContext = () => {
+const useHeaderContext = () => {
   return useContext(HeaderContext);
 };
+
+export default useHeaderContext;

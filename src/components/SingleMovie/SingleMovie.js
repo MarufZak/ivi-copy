@@ -1,37 +1,33 @@
-import useGlobalContext from "../../hooks/useGlobalContext";
 import { useEffect } from "react";
 import { useParams } from "react-router-dom";
-import Track from "../core/Track/Track";
 import Reviews from "./Reviews/Reviews";
 import Header from "./Header/Header";
-import Loading from '../core/Loading/Loading';
 import classes from "./SingleMovie.module.css";
-import Picture from "../core/Picture";
+import {Picture,Loading,Track} from '../core'
+import {useGlobalContext,useSingleMovieContext} from '../../hooks';
 
 const SingleMovie = () => {
   const { movieId } = useParams();
-  const { state, fetchSingleMovie } = useGlobalContext();
+  const {state:globalState} = useGlobalContext();
+  const {state,fetchSingleMovie} = useSingleMovieContext();
 
-  useEffect(() => {
+  useEffect(()=>{
     fetchSingleMovie(movieId);
-  }, [movieId]);
+  },[movieId])
 
-  if (state.singleMovie.isLoading) {
+  if (globalState.isLoading) {
     return <Loading />;
   }
 
   const {
     title,
     genres,
-    production_countries: countries,
     release_date: date,
     runtime: time,
     vote_average,
     overview,
-    vote_count,
-    adult,
     backdrop_path: img,
-  } = state.singleMovie.movie;
+  } = state.movie;
 
   return (
     <div className={classes.movie}>
@@ -65,10 +61,8 @@ const SingleMovie = () => {
                   {Math.floor(time / 60)} ч. {time % 60} мин
                 </li>
               )}
-              {adult && <li className="movie__info-item">18+</li>}
             </ul>
             <ul className={classes.genres}>
-              <li>{countries && countries[0]?.iso_3166_1}</li>
               {genres?.map((genre) => (
                 <li key={genre.id} className={classes.genre}>
                   {genre.name}
@@ -81,12 +75,11 @@ const SingleMovie = () => {
         </div>
         <div className={classes.similar}>
           <Track
-            type="singleMovie"
             title={`С фильмом «${title}» смотрят`}
-            movies={state.singleMovie.movie.similarMovies}
+            movies={state.similarMovies}
           />
         </div>
-        <Reviews reviews={state.singleMovie.movie.reviews} />
+        <Reviews reviews={state.reviews} />
       </div>
     </div>
   );

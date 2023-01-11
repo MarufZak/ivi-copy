@@ -1,5 +1,6 @@
-import { createElement, useEffect, useState } from "react";
+import { useState } from "react";
 import Skeleton from "react-loading-skeleton";
+import placeholderImage from '../../assets/images/placeholder.jpg';
 
 const Image = ({ src, className, alt }) => {
   const [isLoading, setIsLoading] = useState(true);
@@ -7,6 +8,10 @@ const Image = ({ src, className, alt }) => {
   const handleLoaded = () => {
     setIsLoading(false);
   };
+
+  if (src.indexOf(null) != -1) {
+    src = placeholderImage;
+  }
 
   const style = isLoading ? { display: "none" } : {};
 

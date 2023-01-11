@@ -1,0 +1,16 @@
+.arrow {
+    background: none;
+}
+.arrow svg {
+    fill: var(--color-gray);
+    width: 4rem;
+    height: 4rem;
+}
+
+.arrow:first-child {
+    left: clamp(10px,2.6vw, 50px);
+}
+
+.arrow:last-child {
+    right: clamp(10px,2.6vw, 50px);
+}

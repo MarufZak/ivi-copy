@@ -1,13 +1,13 @@
 import { SplideSlide } from "@splidejs/react-splide";
 import { Link } from "react-router-dom";
 import classes from "./Slide.module.css";
-import Image from "../../../core/Image";
+import {Image} from "../../../core";
 
 const Slide = ({ backdrop_path, title, id, index, activeSlideIndex }) => {
   return (
     <SplideSlide
       className={`${classes.slide} ${
-        index === activeSlideIndex && classes["is-active"]
+        index === activeSlideIndex && classes.isActive
       }`}
     >
       <div className="container">

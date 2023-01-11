@@ -87,7 +87,6 @@ svg {
   height: 100%;
   padding: 0 15px;
   margin: 0 auto;
-  overflow: hidden;
 }
 
 
@@ -100,11 +99,3 @@ svg {
   background: var(--color-red);
   color: var(--color-white);
 }
-
-
-
-
-
-
-
-

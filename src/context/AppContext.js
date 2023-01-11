@@ -1,210 +1,36 @@
-import { createContext, useEffect, useReducer } from "react";
+import { createContext, useReducer } from "react";
 import axios from "axios";
-// 903ec37228132dd7bac42a4df3559321
-const popularMoviesUrl =
-  "https://api.themoviedb.org/3/movie/popular?api_key=903ec37228132dd7bac42a4df3559321&language=en-US&page=1";
-const ratedMoviesUrl =
-  "https://api.themoviedb.org/3/movie/top_rated?api_key=903ec37228132dd7bac42a4df3559321&language=en-US&page=1";
-const trendMoviesUrl =
-  "https://api.themoviedb.org/3/trending/movie/week?api_key=903ec37228132dd7bac42a4df3559321";
 
 export const AppProvider = createContext();
 
 const initialState = {
-  popularMovies: {
-    error: { state: false, msg: "" },
-    movies: [],
-    isLoading: false,
-  },
-  ratedMovies: {
-    error: { state: false, msg: "" },
-    movies: [],
-    isLoading: false,
-  },
-  trendMovies: {
-    error: { state: false, msg: "" },
-    movies: [],
-    isLoading: false,
-  },
-  singleMovie: {
-    error: { state: false, msg: "" },
-    movie: {},
-    isLoading: false,
-    reviews: []
-  },
+  isLoading: false,
+  error: { state: false, msg: "" },
 };
 
 const reducer = (state, action) => {
-  if (action.type === "POPULAR_ERROR_TRUE") {
+  if (action.type === "LOADING_TRUE") {
     return {
       ...state,
-      popularMovies: {
-        ...state.popularMovies,
-        error: { state: true, msg: action.payload },
-      },
+      isLoading: true,
     };
   }
-  if (action.type === "POPULAR_ERROR_FALSE") {
+  if (action.type === "LOADING_FALSE") {
     return {
       ...state,
-      popularMovies: {
-        ...state.popularMovies,
-        error: { state: false, msg: "" },
-      },
+      isLoading: false,
     };
   }
-  if (action.type === "POPULAR_LOADING_TRUE") {
+  if (action.type === "ERROR_FALSE") {
     return {
       ...state,
-      popularMovies: {
-        ...state.popularMovies,
-        isLoading: true,
-      },
+      error: { state: false, msg: "" },
     };
   }
-  if (action.type === "POPULAR_LOADING_FALSE") {
+  if (action.type === "ERROR_TRUE") {
     return {
       ...state,
-      popularMovies: {
-        ...state.popularMovies,
-        isLoading: false,
-      },
-    };
-  }
-  if (action.type === "DISPLAY_POPULAR") {
-    return {
-      ...state,
-      popularMovies: { ...state.popularMovies, movies: action.payload },
-    };
-  }
-  if (action.type === "RATED_LOADING_TRUE") {
-    return {
-      ...state,
-      ratedMovies: {
-        ...state.ratedMovies,
-        isLoading: true,
-      },
-    };
-  }
-  if (action.type === "RATED_LOADING_FALSE") {
-    return {
-      ...state,
-      ratedMovies: {
-        ...state.ratedMovies,
-        isLoading: false,
-      },
-    };
-  }
-  if (action.type === "RATED_ERROR_TRUE") {
-    return {
-      ...state,
-      ratedMovies: {
-        ...state.ratedMovies,
-        error: { state: true, msg: action.payload },
-      },
-    };
-  }
-  if (action.type === "RATED_ERROR_FALSE") {
-    return {
-      ...state,
-      ratedMovies: {
-        ...state.ratedMovies,
-        error: { state: false, msg: "" },
-      },
-    };
-  }
-  if (action.type === "DISPLAY_RATED") {
-    return {
-      ...state,
-      ratedMovies: { ...state.ratedMovies, movies: action.payload },
-    };
-  }
-  if (action.type === "TREND_LOADING_TRUE") {
-    return {
-      ...state,
-      trendMovies: {
-        ...state.trendMovies,
-        isLoading: true,
-      },
-    };
-  }
-  if (action.type === "TREND_LOADING_FALSE") {
-    return {
-      ...state,
-      trendMovies: {
-        ...state.trendMovies,
-        isLoading: false,
-      },
-    };
-  }
-  if (action.type === "TREND_ERROR_TRUE") {
-    return {
-      ...state,
-      trendMovies: {
-        ...state.trendMovies,
-        error: { state: true, msg: action.payload },
-      },
-    };
-  }
-  if (action.type === "TREND_ERROR_FALSE") {
-    return {
-      ...state,
-      trendMovies: {
-        ...state.trendMovies,
-        error: { state: false, msg: "" },
-      },
-    };
-  }
-  if (action.type === "DISPLAY_TREND") {
-    return {
-      ...state,
-      trendMovies: { ...state.trendMovies, movies: action.payload },
-    };
-  }
-  if (action.type === "SINGLE_MOVIE_LOADING_TRUE") {
-    return {
-      ...state,
-      singleMovie: {
-        ...state.singleMovie,
-        isLoading: true,
-        movie: []
-      },
-    };
-  }
-  if (action.type === "SINGLE_MOVIE_LOADING_FALSE") {
-    return {
-      ...state,
-      singleMovie: {
-        ...state.singleMovie,
-        isLoading: false,
-      },
-    };
-  }
-  if (action.type === "SINGLE_MOVIE_ERROR_TRUE") {
-    return {
-      ...state,
-      singleMovie: {
-        ...state.singleMovie,
-        error: { state: true, msg: action.payload },
-      },
-    };
-  }
-  if (action.type === "SINGLE_MOVIE_ERROR_FALSE") {
-    return {
-      ...state,
-      singleMovie: {
-        ...state.singleMovie,
-        error: { state: false, msg: "" },
-      },
-    };
-  }
-  if (action.type === "DISPLAY_SINGLE_MOVIE") {
-    return {
-      ...state,
-      singleMovie: {
-        ...state.singleMovie,
-        movie: action.payload,
-      },
+      error: { state: true, msg: action.payload },
     };
   }
 };
@@ -212,84 +38,28 @@ const reducer = (state, action) => {
 const AppContext = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
 
-  const fetchPopular = async (url) => {
-    dispatch({ type: "POPULAR_LOADING_TRUE" });
-    dispatch({ type: "POPULAR_ERROR_FALSE" });
+  const fetchData = async (url, dispatchFunc, dispatchType) => {
+    dispatch({ type: "LOADING_TRUE" });
 
     try {
       const response = await axios(url);
-      const data = response.data.results;
+      let data = response.data;
+      data = data.results ? data.results : data;
 
-      dispatch({ type: "DISPLAY_POPULAR", payload: data });
+      dispatchFunc({type: dispatchType,payload: data})
     } catch (error) {
-      dispatch({ type: "POPULAR_ERROR_TRUE", payload: error.code });
+      dispatch({ type: "ERROR_TRUE", payload: error.message });
     }
-
-    dispatch({ type: "POPULAR_LOADING_FALSE" });
+    dispatch({ type: "LOADING_FALSE" });
   };
 
-  const fetchRated = async (url) => {
-    dispatch({ type: "RATED_LOADING_TRUE" });
-    dispatch({ type: "RATED_ERROR_FALSE" });
-
-    try {
-      const response = await axios(url);
-      const data = response.data.results;
-
-      dispatch({ type: "DISPLAY_RATED", payload: data });
-    } catch (error) {
-      dispatch({ type: "RATED_ERROR_TRUE", payload: error.code });
-    }
-
-    dispatch({ type: "RATED_LOADING_FALSE" });
-  };
-
-  const fetchTrend = async (url) => {
-    dispatch({ type: "TREND_LOADING_TRUE" });
-    dispatch({ type: "TREND_ERROR_FALSE" });
-
-    try {
-      const response = await axios(url);
-      const data = response.data.results;
-
-      dispatch({ type: "DISPLAY_TREND", payload: data });
-    } catch (error) {
-      dispatch({ type: "TREND_ERROR_TRUE", payload: error.code });
-    }
-
-    dispatch({ type: "TREND_LOADING_FALSE" });
-  };
-
-  const fetchSingleMovie = async (id) => {
-    dispatch({ type: "SINGLE_MOVIE_LOADING_TRUE" });
-    dispatch({ type: "SINGLE_MOVIE_ERROR_FALSE" });
-
-    try {
-      const response = await axios(`https://api.themoviedb.org/3/movie/${id}?api_key=903ec37228132dd7bac42a4df3559321&language=en-US`);
-      const data = response.data;
-
-      const similarMoviesResponse = await axios(`https://api.themoviedb.org/3/movie/${id}/similar?api_key=903ec37228132dd7bac42a4df3559321&language=en-US&page=1`);
-      const similarMovies = similarMoviesResponse.data.results;
-
-      const reviewsResponse = await axios(`https://api.themoviedb.org/3/movie/${id}/reviews?api_key=903ec37228132dd7bac42a4df3559321&language=en-US&page=1`);
-      const reviews = reviewsResponse.data.results;
-
-      dispatch({ type: "DISPLAY_SINGLE_MOVIE", payload: {...data,similarMovies,reviews} });
-    } catch (error) {
-      dispatch({ type: "SINGLE_MOVIE_ERROR_TRUE", payload: error.code });
-    }
-
-    dispatch({ type: "SINGLE_MOVIE_LOADING_FALSE" });
-  };
-
-  useEffect(() => {
-    fetchPopular(popularMoviesUrl);
-    fetchRated(ratedMoviesUrl);
-    fetchTrend(trendMoviesUrl);
-  }, []);
+  const value = {
+    state,
+    fetchData
+  }
 
   return (
-    <AppProvider.Provider value={{ state, dispatch, fetchSingleMovie }}>
+    <AppProvider.Provider value={value}>
       {children}
     </AppProvider.Provider>
   );

@@ -1,4 +1,3 @@
-import Icon from "../../../core/Icon";
 import classes from "./Review.module.css";
 
 const Review = (props) => {

@@ -1,0 +1,23 @@
+.arrow {
+  background: none;
+  position: relative;
+  margin-top: 3rem;
+}
+
+.arrow svg {
+  fill: var(--color-gray);
+  width: 4rem;
+  height: 4rem;
+}
+
+.arrows {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 3rem;
+}
+
+.arrow:disabled {
+  opacity: 0.4;
+}

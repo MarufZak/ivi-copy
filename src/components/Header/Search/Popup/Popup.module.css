@@ -1,0 +1,30 @@
+.popup {
+    position: fixed;
+    inset: 0;
+    background: hsl(253deg 47% 4% / 96%);
+    z-index: 1;
+    display: block;
+    overflow-y: auto;
+}
+
+.wrapper {
+    position: relative;
+    inset: 0;
+    overflow-x: hidden;
+}
+
+.body {
+    padding: 5% 15%;
+}
+
+.icon {
+    position: absolute;
+    top: 2%;
+    right: 5%;
+    cursor: pointer;
+}
+
+.icon svg {
+    width: 4rem;
+    height: 4rem;
+}

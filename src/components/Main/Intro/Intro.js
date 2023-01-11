@@ -1,25 +1,17 @@
 import { Splide, SplideTrack } from "@splidejs/react-splide";
-import Slide from "./Slide/Slide";
-import useGlobalContext from "../../../hooks/useGlobalContext";
-import Icon from "../../core/Icon";
+import {useMainContext} from '../../../hooks';
 import { useState } from 'react';
-import Loading from '../../core/Loading/Loading';
-import classes from "./Intro.module.css";;
+import Slide from "./Slide/Slide";
+import classes from "./Intro.module.css";
+import Arrows from "./Arrows/Arrows";
 
 const Intro = () => {
-  const { state } = useGlobalContext();
+  const { state } = useMainContext();
   const [activeSlideIndex,setActiveSlideIndex] = useState(0);
 
-  if (
-    state.popularMovies.isLoading ||
-    state.ratedMovies.isLoading ||
-    state.trendMovies.isLoading
-  ) {
-    return <Loading />;
-  }
-
   return (
-    <Splide onActive={(e)=>setActiveSlideIndex(e.index)}
+    <Splide 
+      onActive={(e)=>setActiveSlideIndex(e.index)}
       className={classes.slider}
       hasTrack={false}
       options={{
@@ -35,18 +27,11 @@ const Intro = () => {
       }}
     >
       <SplideTrack>
-        {state.popularMovies.movies?.slice(4, 7).map((movie,index) => (
+        {state.popularMovies.slice(4, 7).map((movie,index) => (
           <Slide activeSlideIndex={activeSlideIndex} key={movie.id} index={index} {...movie} />
         ))}
       </SplideTrack>
-      <div className="splide__arrows">
-        <button className={`splide__arrow splide__arrow--prev ${classes.slider__arrow}`}>
-          <Icon>arrow</Icon>
-        </button>
-        <button className={`splide__arrow splide__arrow--next ${classes.slider__arrow}`}>
-          <Icon>arrow</Icon>
-        </button>
-      </div>
+      <Arrows/>
     </Splide>
   );
 };
