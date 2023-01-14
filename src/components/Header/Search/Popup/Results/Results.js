@@ -1,26 +1,27 @@
 import classes from "./Results.module.css";
 import { useHeaderContext } from "../../../../../hooks";
-import {Card} from "../../../../core";
+import { Card, LoadingSecond } from "../../../../core";
+import { useGlobalContext } from "../../../../../hooks";
 
 const Results = () => {
-  const { state,searchFalse } = useHeaderContext();
+  const { state, hidePopup,fetchSearchMovies } = useHeaderContext();
+  const { state: globalState } = useGlobalContext();
 
-  const handleClick = (event)=>{
-    if (event.target.className.indexOf('link') !== 1) {
-      searchFalse();
+  const handleClick = (event) => {
+    if (event.target.className.indexOf("link") !== 1) {
+      hidePopup();
     }
-  }
+  };
 
   return (
     <div className={classes.results}>
-      {state.movies.map(movie => {
-        return (
-          <Card onClick={handleClick}
-            {...movie}
-            key={movie.id}
-          />
-        );
+      {state.movies.map((movie) => {
+        return <Card onClick={handleClick} {...movie} key={movie.id} />;
       })}
+      <div className={classes.interact}>
+        {globalState.isLoading && <LoadingSecond />}
+        {state.movies.length > 0 && <button onClick={fetchSearchMovies} className="btn btn--red">Load more</button>}
+      </div>
     </div>
   );
 };

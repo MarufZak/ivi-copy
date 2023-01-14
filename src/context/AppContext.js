@@ -6,6 +6,7 @@ export const AppProvider = createContext();
 const initialState = {
   isLoading: false,
   error: { state: false, msg: "" },
+  modal: {}
 };
 
 const reducer = (state, action) => {
@@ -33,6 +34,26 @@ const reducer = (state, action) => {
       error: { state: true, msg: action.payload },
     };
   }
+  if (action.type === "SHOW_MODAL") {
+    return {
+      ...state,
+      modal: {
+        state: true,
+        title: action.payload.title,
+        text: action.payload.text
+      }
+    }
+  }
+  if (action.type === "HIDE_MODAL") {
+    return {
+      ...state,
+      modal: {
+        state: false,
+        title: "",
+        text: ""
+      }
+    }
+  }
 };
 
 const AppContext = ({ children }) => {
@@ -44,18 +65,34 @@ const AppContext = ({ children }) => {
     try {
       const response = await axios(url);
       let data = response.data;
+      let pages = data.total_pages || 0;
       data = data.results ? data.results : data;
 
-      dispatchFunc({type: dispatchType,payload: data})
+      dispatchFunc({type: dispatchType,payload: data , totalPages: pages})
     } catch (error) {
       dispatch({ type: "ERROR_TRUE", payload: error.message });
     }
     dispatch({ type: "LOADING_FALSE" });
   };
 
+  const handleError = (error)=>{
+    dispatch({type: "ERROR_TRUE",payload: error})
+  }
+
+  const showModal = (title,text)=>{
+    dispatch({type: "SHOW_MODAL",payload: {title,text}})
+  }
+
+  const hideModal = ()=>{
+    dispatch({type: "HIDE_MODAL"})
+  }
+
   const value = {
     state,
-    fetchData
+    fetchData,
+    handleError,
+    showModal,
+    hideModal
   }
 
   return (

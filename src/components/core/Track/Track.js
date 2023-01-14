@@ -5,14 +5,16 @@ import Arrows from "./Arrows/Arrows";
 import Header from "./Header/Header";
 
 const Track = ({ title, movies }) => {
+  if (movies.length === 0) return;
 
   return (
     <div className={classes.track}>
-      <Header title={title}/>
+      <Header title={title} />
       <Splide
         className={classes.slider}
         hasTrack={false}
         options={{
+          arrows: movies.length > 0,
           perPage: 7,
           gap: 24,
           pagination: false,
@@ -30,13 +32,13 @@ const Track = ({ title, movies }) => {
         }}
       >
         <SplideTrack>
-          {movies?.map(movie => (
+          {movies.map((movie) => (
             <SplideSlide key={movie.id}>
               <Card {...movie} />
             </SplideSlide>
           ))}
         </SplideTrack>
-          <Arrows />
+        <Arrows />
       </Splide>
     </div>
   );

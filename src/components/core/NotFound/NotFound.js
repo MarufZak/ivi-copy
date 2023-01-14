@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import classes from './Error.module.css';
+import classes from './NotFound.module.css';
 
 const Error = () => {
   return <div className={classes.error}>

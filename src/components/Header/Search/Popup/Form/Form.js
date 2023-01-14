@@ -4,8 +4,8 @@ import {Icon} from "../../../../core";
 import { useHeaderContext } from '../../../../../hooks';
 
 const Form = () => {
+  const {state,fetchSearchMovies,queryChange,clearMovies} = useHeaderContext();
   const inputRef = useRef();
-  const {state,fetchSearchMovies,queryChange} = useHeaderContext();
 
   const handleIconClick = ()=>{
     if (state.query) {
@@ -17,13 +17,15 @@ const Form = () => {
   const handleSubmit = (e)=>{
     e.preventDefault();
 
+    clearMovies();
+
     fetchSearchMovies();
   }
 
 
   return (
     <form onSubmit={handleSubmit} className={classes.form}>
-      <input onChange={(e)=>queryChange(e.target.value)} value={state.query} ref={inputRef} type="text" className={classes.input} />
+      <input required onChange={(e)=>queryChange(e.target.value)} value={state.query} ref={inputRef} type="text" className={classes.input} />
       <span onClick={handleIconClick} className={classes.icon}>
         {state.query === "" ? <Icon>search</Icon> : <Icon>close</Icon>}
       </span>

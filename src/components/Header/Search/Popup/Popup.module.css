@@ -2,7 +2,7 @@
     position: fixed;
     inset: 0;
     background: hsl(253deg 47% 4% / 96%);
-    z-index: 1;
+    z-index: 2;
     display: block;
     overflow-y: auto;
 }
@@ -19,7 +19,7 @@
 
 .icon {
     position: absolute;
-    top: 2%;
+    top: 5%;
     right: 5%;
     cursor: pointer;
 }

@@ -1,8 +1,6 @@
 import { createContext, useEffect, useReducer } from "react";
 import useGlobalContext from '../hooks/useGlobalContext';
 
-// https://api.themoviedb.org/3/discover/movie?api_key=903ec37228132dd7bac42a4df3559321&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=1&with_genres=action&with_watch_monetization_types=flatrate
-
 export const HeaderContext = createContext();
 
 // 903ec37228132dd7bac42a4df3559321
@@ -17,8 +15,16 @@ const reducer = (state, action) => {
   if (action.type === "DISPLAY_MOVIES") {
     return {
       ...state,
-      movies: action.payload,
+      page: state.page+1,
+      movies: [...state.movies,...action.payload],
     };
+  }
+  if (action.type === "CLEAR_MOVIES") {
+    return {
+      ...state,
+      page: 1,
+      movies: []
+    }
   }
   if (action.type === "POPUP_HIDE") {
     return {
@@ -50,6 +56,10 @@ const HeaderProvider = ({ children }) => {
     dispatch({type: "POPUP_SHOW"});
   }
 
+  const clearMovies = ()=>{
+    dispatch({type: "CLEAR_MOVIES"})
+  }
+
   const hidePopup = ()=>{
     document.body.classList.remove('lock');
     dispatch({type: "POPUP_HIDE"});
@@ -68,7 +78,8 @@ const HeaderProvider = ({ children }) => {
     fetchSearchMovies,
     queryChange,
     showPopup,
-    hidePopup
+    hidePopup,
+    clearMovies
   }
 
   return (

@@ -18,7 +18,7 @@ const Popup = () => {
               <Icon>close</Icon>
             </span>
             <Form />
-            {globalState.isLoading ? <Loading /> : <Results />}
+            <Results/>
           </div>
         </div>
       </div>

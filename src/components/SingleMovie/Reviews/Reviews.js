@@ -1,7 +1,7 @@
 import { Splide, SplideSlide, SplideTrack } from "@splidejs/react-splide";
-import {Icon} from "../../core";
-import classes from './Reviews.module.css';
-import Review from './Review/Review';
+import classes from "./Reviews.module.css";
+import Review from "./Review/Review";
+import Arrows from "./Arrows/Arrows";
 
 const Reviews = ({ reviews }) => {
   return (
@@ -13,7 +13,9 @@ const Reviews = ({ reviews }) => {
       </header>
       <Splide
         className={classes.slider}
+        hasTrack={false}
         options={{
+          arrows: reviews.length>0,
           perPage: 4,
           gap: 24,
           pagination: false,
@@ -29,7 +31,6 @@ const Reviews = ({ reviews }) => {
             },
           },
         }}
-        hasTrack={false}
       >
         <SplideTrack>
           {reviews?.map((review) => (
@@ -38,16 +39,7 @@ const Reviews = ({ reviews }) => {
             </SplideSlide>
           ))}
         </SplideTrack>
-        {reviews?.length > 0 && (
-          <div className={`splide__arrows ${classes.slider__arrows}`}>
-            <button className={`splide__arrow--prev ${classes.slider__arrow}`}>
-              <Icon>arrow</Icon>
-            </button>
-            <button className={`splide__arrow--next ${classes.slider__arrow}`}>
-              <Icon>arrow</Icon>
-            </button>
-          </div>
-        )}
+        <Arrows />
       </Splide>
     </div>
   );

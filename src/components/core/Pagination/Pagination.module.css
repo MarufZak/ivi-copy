@@ -1,0 +1,46 @@
+.pagination {
+  margin-top: auto;
+  display: flex;
+  justify-content: center;
+}
+
+.item,
+.btn {
+  width: 60px;
+  height: 60px;
+  background: var(--color-purple);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 3px;
+  cursor: pointer;
+  position: relative;
+  border-radius: 5px;
+}
+
+.link {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.active {
+  background: var(--color-red);
+}
+
+.active .link {
+  color: var(--color-white);
+}
+
+.btnPrev a::after {
+  content: "\2190";
+}
+
+.btnNext a::after {
+  content: "\2192";
+}

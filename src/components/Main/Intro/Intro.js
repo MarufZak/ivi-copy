@@ -27,7 +27,7 @@ const Intro = () => {
       }}
     >
       <SplideTrack>
-        {state.popularMovies.slice(4, 7).map((movie,index) => (
+        {state.popularMovies.slice(14,17).map((movie,index) => (
           <Slide activeSlideIndex={activeSlideIndex} key={movie.id} index={index} {...movie} />
         ))}
       </SplideTrack>

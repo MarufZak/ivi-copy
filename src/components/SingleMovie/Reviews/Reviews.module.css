@@ -13,27 +13,3 @@
 .header {
   margin-bottom: 20px;
 }
-
-.slider__arrow {
-  background: none;
-  position: relative;
-  margin-top: 3rem;
-}
-
-.slider__arrow svg {
-  fill: var(--color-gray);
-  width: 4rem;
-  height: 4rem;
-}
-
-.slider__arrows {
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  gap: 3rem;
-}
-
-.slider__arrow:disabled {
-  opacity: 0.4;
-}

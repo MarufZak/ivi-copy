@@ -1,7 +1,8 @@
 import List from "./List/List";
 import classes from "./Header.module.css";
-import {Logo} from "../core";
+import { Logo } from "../core";
 import Search from "./Search/Search";
+import Auth from "./Auth/Auth";
 
 const Header = () => {
   return (
@@ -11,6 +12,7 @@ const Header = () => {
           <Logo />
           <List />
           <Search />
+          <Auth />
         </nav>
       </div>
     </header>

@@ -1,15 +1,14 @@
 .header {
-  /* padding: 10px 0; */
   position: relative;
 }
 
 .nav {
   display: grid;
-  grid-template-columns: max-content 1fr max-content;
+  grid-template-columns: max-content 1fr max-content max-content;
   align-items: center;
   column-gap: 3rem;
   position: relative;
-  z-index: 2;
+  z-index: 1;
 }
 
 @media screen and (max-width: 576px) {

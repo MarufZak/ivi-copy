@@ -5,7 +5,11 @@ import Track from './Track/Track';
 import Icon from './Icon';
 import Image from './Image';
 import Picture from './Picture';
-import Error from './Error/Error';
+import NotFound from './NotFound/NotFound';
+import LoadingSecond from './LoadingSecond/LoadingSecond';
+import Pagination from './Pagination/Pagination';
+
+
 
 export {
     Card,
@@ -15,5 +19,7 @@ export {
     Icon,
     Image,
     Picture,
-    Error
+    NotFound,
+    LoadingSecond,
+    Pagination
 }

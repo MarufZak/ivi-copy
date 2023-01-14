@@ -5,6 +5,10 @@ import {useMainContext} from '../../../hooks';
 const Content = () => {
   const { state } = useMainContext();
 
+  if (state.popularMovies.length === 0) {
+    
+  }
+
   return (
     <div className={classes.content}>
       <div className="container">

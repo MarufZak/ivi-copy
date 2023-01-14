@@ -1,9 +1,11 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { SkeletonTheme } from "react-loading-skeleton";
-import useGlobalContext from "./hooks/useGlobalContext";
-import { HeaderProvider, MainProvider, SingleMovieProvider } from "./context";
-import {Error} from './components/core'
-import { Header, Main, SingleMovie } from "./components";
+import {useGlobalContext} from "./hooks";
+import { HeaderProvider, MainProvider, SingleMovieProvider,PopularProvider,AuthProvider } from "./context";
+import { NotFound } from './components/core'
+import { Header, Main, SingleMovie,Popular,Login,SignUp } from "./components";
+import Modal from "./components/core/Modal/Modal";
+import Confirm from "./components/Confirm/Confirm";
 
 const App = () => {
   const { state } = useGlobalContext();
@@ -14,14 +16,21 @@ const App = () => {
 
   return (
       <BrowserRouter>
+        <AuthProvider>
         <SkeletonTheme baseColor="#25282e" highlightColor="#696969">
           <HeaderProvider> <Header /> </HeaderProvider>
+          <Modal />
           <Routes>
             <Route path="/" element={<MainProvider> <Main /> </MainProvider> } />
+            <Route path="/popular" element={<PopularProvider><Popular/></PopularProvider>} />
             <Route path="/movie/:movieId" element={ <SingleMovieProvider> <SingleMovie /> </SingleMovieProvider>}/>
-            <Route path="*" element={<Error/>} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/signup" element={<SignUp/>} />
+            <Route path="/confirm" element={<Confirm/>} />
+            <Route path="*" element={<NotFound/>} />
           </Routes>
         </SkeletonTheme>
+        </AuthProvider>
       </BrowserRouter>
   );
 };
