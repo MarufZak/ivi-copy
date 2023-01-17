@@ -54,3 +54,16 @@
   align-items: center;
   justify-content: center;
 }
+
+
+.like {
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 2;
+}
+
+.like svg {
+  width: 5rem;
+  height: 5rem;
+}

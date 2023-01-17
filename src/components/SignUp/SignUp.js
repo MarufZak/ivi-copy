@@ -1,5 +1,6 @@
 import classes from "./SignUp.module.css";
 import useAuthContext from "../../hooks/useAuthContext";
+import Loading from '../core/Loading/Loading';
 
 const SignUp = () => {
   const {
@@ -20,6 +21,20 @@ const SignUp = () => {
   const handleLoginWithGoogle = () => {
     loginWithGoogle();
   };
+
+  if (state.isLoading) {
+    return <Loading />
+  }
+
+  if (!state.user.isEmailVerified) {
+    return <div className={classes.signup}>
+      <div className="container">
+        <div className={classes.body}>
+          <h2 className={classes.title}>Confirmation email is sent to your email , please confirm it.</h2>
+        </div>
+      </div>
+    </div>
+  }
 
   return (
     <div className={classes.signup}>

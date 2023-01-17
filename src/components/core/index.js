@@ -8,6 +8,7 @@ import Picture from './Picture';
 import NotFound from './NotFound/NotFound';
 import LoadingSecond from './LoadingSecond/LoadingSecond';
 import Pagination from './Pagination/Pagination';
+import Modal from './Modal/Modal';
 
 
 
@@ -21,5 +22,6 @@ export {
     Picture,
     NotFound,
     LoadingSecond,
-    Pagination
+    Pagination,
+    Modal
 }
