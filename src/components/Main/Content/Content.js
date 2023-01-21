@@ -5,24 +5,20 @@ import {useMainContext} from '../../../hooks';
 const Content = () => {
   const { state } = useMainContext();
 
-  if (state.popularMovies.length === 0) {
-    
-  }
-
   return (
     <div className={classes.content}>
       <div className="container">
         <div className={classes.content__body}>
           <Track
-            movies={state.popularMovies}
+            movies={state.popular_movies}
             title="Рекомендуем вам посмотреть"
           />
           <Track
-            movies={state.ratedMovies}
+            movies={state.rated_movies}
             title="Фильмы с высоким рейтингом"
           />
           <Track
-            movies={state.trendMovies}
+            movies={state.trend_movies}
             title="Фильмы с в тренде"
           />
         </div>

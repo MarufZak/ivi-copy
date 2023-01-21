@@ -20,7 +20,6 @@ const Picture = ({ children }) => {
             let src = child.props.srcSet.indexOf(null) == -1 ? child.props.srcSet : placeholderImage; // check if there is an image from API
             return (
               <source key={index}
-                onLoad={handleLoaded}
                 srcSet={src}
                 media={child.props.media}
               />

@@ -1,19 +1,13 @@
-import { useEffect } from 'react';
 import classes from './Main.module.css'
 import Intro from './Intro/Intro';
 import Content from './Content/Content';
 import {Loading} from '../core';
-import {useMainContext,useGlobalContext} from '../../hooks';
+import useMainContext from '../../hooks/useMainContext';
 
 const Main = () => {
-  const {fetchMain} = useMainContext();
-  const {state:globalState} = useGlobalContext();
+  const {state} = useMainContext();
 
-  useEffect(()=>{
-    fetchMain();
-  },[])
-
-  if (globalState.isLoading) {
+  if (state.popular_movies_loading || state.trend_movies_loading || state.rated_movies_loading) {
     return <Loading/>
   }
 

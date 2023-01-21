@@ -1,29 +1,26 @@
-import { useEffect } from "react";
 import Header from "./Header/Header";
 import classes from "./Popular.module.css";
-import {useGlobalContext,usePopularContext} from '../../hooks';
-import {Loading,Pagination,Card} from '../core';
+import { usePopularContext } from "../../hooks";
+import { Pagination, Card, Loading } from "../core";
 
 const Popular = () => {
-  const { state, fetchPopularMovies, setPage } = usePopularContext();
-  const {state:globalState} = useGlobalContext();
+  const { state } = usePopularContext();
 
-  useEffect(() => {
-    fetchPopularMovies();
-  }, [state.page]);
+  if (state.popular_movies_loading) {
+    return <Loading/>
+  }
 
   return (
     <div className={classes.popular}>
       <div className="container">
         <div className={classes.body}>
           <Header />
-            {globalState.isLoading && <Loading/>}
-          <div className={classes.cards}>
-              {state.popularMovies.map((movie) => (
-              <Card key={movie.id} {...movie} />
-            ))}
-          </div>
-          <Pagination onPageChange={(e)=>setPage(e.selected+1)} pageCount={state.totalPages} />
+            <div className={classes.cards}>
+              {state.popular_movies.map((movie) => (
+                <Card key={movie.id} {...movie} />
+              ))}
+            </div>
+          <Pagination pageCount={state.total_pages} />
         </div>
       </div>
     </div>

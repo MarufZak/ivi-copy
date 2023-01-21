@@ -25,7 +25,7 @@ const Form = () => {
 
   return (
     <form onSubmit={handleSubmit} className={classes.form}>
-      <input required onChange={(e)=>queryChange(e.target.value)} value={state.query} ref={inputRef} type="text" className={classes.input} />
+      <input value={state.query} onChange={(e)=>queryChange(e.target.value)} required ref={inputRef} type="text" className={classes.input} />
       <span onClick={handleIconClick} className={classes.icon}>
         {state.query === "" ? <Icon>search</Icon> : <Icon>close</Icon>}
       </span>

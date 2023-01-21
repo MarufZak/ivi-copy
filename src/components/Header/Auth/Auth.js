@@ -3,33 +3,28 @@ import { Icon, Loading } from "../../core";
 import useAuthContext from "../../../hooks/useAuthContext";
 import Dropdown from "./Dropdown/Dropdown";
 import { useState } from "react";
-import { auth } from "../../../firebase/firebase";
 
 const Auth = () => {
-  const { state } = useAuthContext();
-
   const [isDropdownActive, setIsDropdownActive] = useState(false);
+  const {state} = useAuthContext();
+  console.log(state);
 
-  if (state.isLoading) return;
-
-  return (
-    <div
-      onMouseLeave={() => setIsDropdownActive(false)}
-      onMouseEnter={() => setIsDropdownActive(true)}
-      className={classes.auth}
-    >
-      {state.user?.name ? (
-        <span className={classes.icon}>
-          {auth.currentUser?.displayName[0].toUpperCase()}
-        </span>
-      ) : (
-        <span className={classes.icon}>
-          <Icon>user</Icon>
-        </span>
-      )}
+  return <>
+    {
+      (state.user.name && !state.user.emailVerified) && <button className="btn btn--red">Your email is not verified, please verify it!</button>
+    }
+    <div onClick={()=>setIsDropdownActive(!isDropdownActive)}
+    className={classes.auth}>
+      <span className={classes.icon}>
+        {
+          state.user.name
+          ? state.user.name[0].toUpperCase()
+          : <Icon>user</Icon>
+        }
+      </span>
       <Dropdown isDropdownActive={isDropdownActive} />
     </div>
-  );
+  </>
 };
 
 export default Auth;

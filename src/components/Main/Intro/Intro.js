@@ -4,6 +4,7 @@ import { useState } from 'react';
 import Slide from "./Slide/Slide";
 import classes from "./Intro.module.css";
 import Arrows from "./Arrows/Arrows";
+import { Loading } from "../../core";
 
 const Intro = () => {
   const { state } = useMainContext();
@@ -27,7 +28,7 @@ const Intro = () => {
       }}
     >
       <SplideTrack>
-        {state.popularMovies.slice(14,17).map((movie,index) => (
+        {state.popular_movies.slice(14,17).map((movie,index) => (
           <Slide activeSlideIndex={activeSlideIndex} key={movie.id} index={index} {...movie} />
         ))}
       </SplideTrack>

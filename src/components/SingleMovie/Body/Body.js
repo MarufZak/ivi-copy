@@ -9,7 +9,7 @@ const Body = (props) => {
         <Picture>
           <source
             srcSet={`https://image.tmdb.org/t/p/original${img}`}
-            media="(min-width: 576px)"
+            media="(min-width: 577px)"
           />
           <source
             srcSet={`https://image.tmdb.org/t/p/w500${img}`}

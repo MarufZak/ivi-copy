@@ -1,12 +1,21 @@
 import classes from './Pagination.module.css';
 import ReactPaginate from 'react-paginate';
+import usePopularContext from '../../../hooks/usePopularContext';
 
-const Pagination = ({pageCount,onPageChange}) => {
+const Pagination = ({pageCount}) => {
+  const {state,setPage} = usePopularContext();
+
+  const handlePageChange = (e)=>{
+    setPage(e.selected+1);
+
+    window.scrollTo({top: 0})
+  }
+
   return (
-    <ReactPaginate onClick={()=>window.scrollTo({top: 0})}
-      onPageChange={onPageChange}
+    <ReactPaginate
+      onPageChange={handlePageChange}
       pageCount={pageCount}
-      initialPage={0}
+      initialPage={state.page-1}
       containerClassName={classes.pagination}
       pageClassName={classes.item}
       pageLinkClassName={classes.link}

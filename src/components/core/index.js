@@ -10,8 +10,6 @@ import LoadingSecond from './LoadingSecond/LoadingSecond';
 import Pagination from './Pagination/Pagination';
 import Modal from './Modal/Modal';
 
-
-
 export {
     Card,
     Loading,
@@ -23,5 +21,5 @@ export {
     NotFound,
     LoadingSecond,
     Pagination,
-    Modal
+    Modal,
 }

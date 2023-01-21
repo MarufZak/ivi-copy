@@ -4,8 +4,10 @@ import { Card, LoadingSecond } from "../../../../core";
 import { useGlobalContext } from "../../../../../hooks";
 
 const Results = () => {
-  const { state, hidePopup,fetchSearchMovies } = useHeaderContext();
+  const { state, hidePopup,loadMore } = useHeaderContext();
   const { state: globalState } = useGlobalContext();
+
+
 
   const handleClick = (event) => {
     if (event.target.className.indexOf("link") !== 1) {
@@ -15,12 +17,13 @@ const Results = () => {
 
   return (
     <div className={classes.results}>
-      {state.movies.map((movie) => {
+      {state.search_movies_loading && <LoadingSecond/>  }
+      {state.search_movies.map((movie) => {
         return <Card onClick={handleClick} {...movie} key={movie.id} />;
       })}
       <div className={classes.interact}>
         {globalState.isLoading && <LoadingSecond />}
-        {state.movies.length > 0 && <button onClick={fetchSearchMovies} className="btn btn--red">Load more</button>}
+        {state.search_movies.length > 0 && <button onClick={loadMore} className="btn btn--red">Load more</button>}
       </div>
     </div>
   );

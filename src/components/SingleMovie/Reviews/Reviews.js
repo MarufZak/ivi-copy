@@ -34,7 +34,7 @@ const Reviews = ({ reviews }) => {
       >
         <SplideTrack>
           {reviews?.map((review) => (
-            <SplideSlide>
+            <SplideSlide key={review.id}>
               <Review {...review} />
             </SplideSlide>
           ))}

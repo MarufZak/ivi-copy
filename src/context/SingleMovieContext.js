@@ -1,54 +1,61 @@
-import { createContext, useEffect, useReducer } from "react";
-import useGlobalContext from "../hooks/useGlobalContext";
+import { createContext, useReducer } from "react";
+import axios from 'axios';
 
 export const SingleMovieContext = createContext();
 
 const initialState = {
+  single_movie_loading: false,
+  single_movie_error: false,
   movie: {},
-  reviews: [],
-  similarMovies: [],
+  similar_movies: [],
+  reviews: []
 };
 
 const reducer = (state, action) => {
-  if (action.type === "CLEAR_SINGLE_MOVIE") {
-    return {
-      movie: {},
-      reviews: [],
-      similarMovies: [],
-    };
-  }
-  if (action.type === "DISPLAY_MOVIE") {
+  if (action.type === "FETCH_SINGLE_MOVIE_BEGIN") {
     return {
       ...state,
-      movie: action.payload,
-    };
+      single_movie_loading: true,
+      single_movie_error: false
+    }  
   }
-  if (action.type === "DISPLAY_REVIEWS") {
+  if (action.type === "FETCH_SINGLE_MOVIE_SUCCESS") {
     return {
       ...state,
-      reviews: action.payload,
-    };
+      single_movie_loading: false,
+      movie: action.payload.movie,
+      similar_movies: action.payload.similarMovies,
+      reviews: action.payload.reviews
+    }
   }
-  if (action.type === "DISPLAY_SIMILAR_MOVIES") {
+  if (action.type === "FETCH_SINGLE_MOVIE_ERROR") {
     return {
       ...state,
-      similarMovies: action.payload,
-    };
+      single_movie_loading: false,
+      single_movie_error: true,
+    }
   }
 };
 
 const SingleMovieProvider = ({children}) => {
-  const { fetchData } = useGlobalContext();
-
   const [state, dispatch] = useReducer(reducer, initialState);
 
-  const fetchSingleMovie = (id)=>{
-    dispatch({type: "CLEAR_SINGLE_MOVIE"});
+  const fetchSingleMovie = async(id)=>{
+    dispatch({type: "FETCH_SINGLE_MOVIE_BEGIN"});
 
+    try {
+      const movieResponse = await axios(`https://api.themoviedb.org/3/movie/${id}?api_key=903ec37228132dd7bac42a4df3559321&language=en-US`);
+      const similarMoviesResponse = await axios(`https://api.themoviedb.org/3/movie/${id}/similar?api_key=903ec37228132dd7bac42a4df3559321&language=en-US&page=1`)
+      const reviewsResponse = await axios(`https://api.themoviedb.org/3/movie/${id}/reviews?api_key=903ec37228132dd7bac42a4df3559321&language=en-US&page=1`)
 
-    fetchData(`https://api.themoviedb.org/3/movie/${id}?api_key=903ec37228132dd7bac42a4df3559321&language=en-US`,dispatch,"DISPLAY_MOVIE");
-    fetchData(`https://api.themoviedb.org/3/movie/${id}/similar?api_key=903ec37228132dd7bac42a4df3559321&language=en-US&page=1`,dispatch,"DISPLAY_SIMILAR_MOVIES");
-    fetchData(`https://api.themoviedb.org/3/movie/${id}/reviews?api_key=903ec37228132dd7bac42a4df3559321&language=en-US&page=1`,dispatch,"DISPLAY_REVIEWS");
+      const movie = movieResponse.data;
+      const similarMovies = similarMoviesResponse.data.results;
+      const reviews = reviewsResponse.data.results;
+
+      dispatch({type: "FETCH_SINGLE_MOVIE_SUCCESS",payload: {movie,similarMovies,reviews}})      
+    } catch (error) {
+      dispatch({type: "FETCH_SINGLE_MOVIE_ERROR"})
+    }
   }
 
   const value = {

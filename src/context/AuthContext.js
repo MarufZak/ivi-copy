@@ -1,303 +1,190 @@
-import { createContext, useEffect, useReducer, useState } from "react";
-import {
-  createUserWithEmailAndPassword,
-  signInWithPopup,
-  signInWithEmailAndPassword,
-  updateProfile,
-  signOut,
-  sendEmailVerification,
-  onAuthStateChanged,
-} from "firebase/auth";
-import { auth, db, provider } from "../firebase/firebase";
+import { useEffect,useReducer,createContext } from "react";
+import { createUserWithEmailAndPassword, onAuthStateChanged, sendEmailVerification, signInWithEmailAndPassword, signOut, updateProfile} from "firebase/auth";
+import { auth, db } from "../firebase/firebase";
+import { setDoc, doc, arrayUnion, getDoc, updateDoc, arrayRemove } from "firebase/firestore";
 import { useGlobalContext } from "../hooks";
 import { useNavigate } from "react-router-dom";
-import { getDoc, doc, setDoc, updateDoc, arrayUnion, arrayRemove } from 'firebase/firestore';
 
 export const AuthContext = createContext();
 
 const initialState = {
-  name: "",
-  email: "",
-  password: "",
+  liked_movies_loading: false,
+  liked_movies_error: false,
+  liked_movies: [],
+
+  auth_loading: false,
+  auth_error: false,
+
   user: {
     name: '',
     email: '',
-    isEmailVerified: false,
-    likedMovies: []
-  },
-  isLoading: false,
+    emailVerified: false
+  }  
 };
 
 const reducer = (state, action) => {
-  if (action.type === "EMAIL_CHANGE") {
+  if (action.type === "ADD_LIKED_MOVIE") {
     return {
       ...state,
-      email: action.payload,
+      liked_movies: [...state.liked_movies, action.payload],
     };
   }
-  if (action.type === "PASSWORD_CHANGE") {
+  if (action.type === "REMOVE_LIKED_MOVIE") {
     return {
       ...state,
-      password: action.payload,
+      liked_movies: state.liked_movies.filter((movie) => movie.id !== action.payload),
     };
   }
-  if (action.type === "NAME_CHANGE") {
+  if (action.type === "FETCH_LIKED_MOVIES_BEGIN") {
     return {
       ...state,
-      name: action.payload,
-    };
+      liked_movies_loading: true,
+      liked_movies_error: false
+    }
   }
-  if (action.type === "SET_USER") {
+  if (action.type === "FETCH_LIKED_MOVIES_SUCCESS") {
     return {
       ...state,
+      liked_movies_loading: false,
+      liked_movies: action.payload
+    }
+  }
+  if (action.type === "FETCH_LIKED_MOVIES_ERROR") {
+    return {
+      ...state,
+      liked_movies_loading: false,
+      liked_movies_error: true
+    }
+  }
+  if (action.type === "AUTH_BEGIN") {
+    return {
+      ...state,
+      auth_loading: true,
+      auth_error: false
+    }
+  }
+  if (action.type === "AUTH_SUCCESS") {
+    return {
+      ...state,
+      auth_loading: false,
       user: {
-        ...state.user,
-        ...action.payload
-      },
-    };
-  }
-  if (action.type === "LOADING_TRUE") {
-    return {
-      ...state,
-      isLoading: true,
-    };
-  }
-  if (action.type === "LOADING_FALSE") {
-    return {
-      ...state,
-      isLoading: false,
-    };
-  }
-  if (action.type === "EMAIL_VERIFIED") {
-    console.log(state.user);
-    return {
-      ...state,
-      user: {
-        ...state.user,
-        isEmailVerified: true,
-      },
-    };
-  }
-  if (action.type === "SET_LIKED_MOVIES") {
-    return {
-      ...state,
-      user: {
-        ...state.user,
-        likedMovies: action.payload
+        name: action.payload.name,
+        email: action.payload.email,
+        emailVerified: action.payload.emailVerified
       }
+    }
+  }
+  if (action.type === "AUTH_ERROR") {
+    return {
+      ...state,
+      auth_loading: false,
+      auth_error: true
     }
   }
 };
 
 const AuthProvider = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
-  const { handleError, showModal } = useGlobalContext();
-  const [isSigningUp, setIsSigningUp] = useState(false);
+  const { showModal } = useGlobalContext();
   const navigation = useNavigate();
-
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      if (user && isSigningUp) {
-        const interval = setInterval(() => {
-          console.log('interval');
-          user.reload().then(() => {
-            if (user.emailVerified) {
-              setIsSigningUp(false);
-              dispatch({ type: "EMAIL_VERIFIED" });
-              navigation("/");
-              clearInterval(interval);
-              showModal("Success", "you have verified your email");
-            }
-          });
-
-          return () => clearInterval(interval);
-        }, [5000]);
-      }
-    });
-
-    return () => unsubscribe();
-  }, [isSigningUp]);
 
   useEffect(()=>{
     const unsubscribe = onAuthStateChanged(auth,(user)=>{
       if (user) {
-        dispatch({type: "SET_USER",payload: {
-          name: user.displayName,
-          email: user.email,
-          isEmailVerified: user.emailVerified,
-        }})
+        dispatch({type: "AUTH_SUCCESS",payload: {name: user.displayName,email: user.email, emailVerified: user.emailVerified}})
       }
+    },(error)=>{
+      dispatch({type: "AUTH_ERROR"})
+      showModal("Error","Error in auth")
     })
 
     return ()=>unsubscribe();
   },[])
-
-  useEffect(()=>{
-    const getLikedMovies = async()=>{
+  
+  useEffect(() => {
+    const fetchLikedMovies = async()=>{
+      dispatch({type: "FETCH_LIKED_MOVIES_BEGIN"})
+  
       try {
-        const docRef = doc(db,"users",`${auth.currentUser?.displayName}`)
-        let likedMovies = await getDoc(docRef);
-
-        dispatch({type: "SET_LIKED_MOVIES",payload: likedMovies.data().likedMovies})
+        const myDoc = await getDoc(doc(db, "users", state.user.name));
+        dispatch({ type: "FETCH_LIKED_MOVIES_SUCCESS", payload: myDoc.data().liked_movies });
       } catch (error) {
-        console.log(error);
+        dispatch({type: "FETCH_LIKED_MOVIES_ERROR"})
       }
     }
     if (auth.currentUser) {
-      getLikedMovies();
+      fetchLikedMovies();
     }
-  },[auth.currentUser])
+  }, [auth.currentUser]);
 
-  const handleLike = async(id,title,img)=>{
-    if (!auth.currentUser) {
-      return showModal("Register","Register first");
-    }
-    try {
-      const docRef = doc(db,"users",`${auth.currentUser.displayName}`)
-      const data = await getDoc(docRef);
-      if (!data.data()) {
-        await setDoc(docRef,{likedMovies: [id]})
-        dispatch({type: "SET_LIKED_MOVIES",payload: [{id,title,img}]})
-      } else {
-        if (data.data().likedMovies.indexOf(id) !== -1) {
-          await updateDoc(docRef,{likedMovies: arrayRemove({id,title,img})})
-          dispatch({type: "SET_LIKED_MOVIES",payload: state.user.likedMovies.filter(movie=>movie.id!==id)})
-        } else {
-          await updateDoc(docRef,{likedMovies: arrayUnion({id,title,img})})
-          dispatch({type: "SET_LIKED_MOVIES",payload: [...state.user.likedMovies,{id,title,img}]})
-        }
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  }
+  const signup = (name, email, password) => {
+    dispatch({type: "AUTH_BEGIN"})
 
-  const reset = () => {
-    changeEmail("");
-    changeName("");
-    changePassword("");
-  };
-
-  const changeEmail = (email) => {
-    dispatch({ type: "EMAIL_CHANGE", payload: email });
-  };
-
-  const changePassword = (password) => {
-    dispatch({ type: "PASSWORD_CHANGE", payload: password });
-  };
-
-  const changeName = (name) => {
-    dispatch({ type: "NAME_CHANGE", payload: name });
-  };
-
-  const signup = () => {
-    setIsSigningUp(true);
-    dispatch({ type: "LOADING_TRUE" });
-
-    createUserWithEmailAndPassword(auth, state.email, state.password)
+    createUserWithEmailAndPassword(auth, email, password)
       .then(() => {
-        updateProfile(auth.currentUser, { displayName: state.name });
+        updateProfile(auth.currentUser, { displayName: name }).then(() => {
+          dispatch({type: "AUTH_SUCCESS",payload: {name:auth.currentUser?.displayName,email: auth.currentUser?.email, emailVerified: auth.currentUser?.emailVerified}})
+          setDoc(doc(db, "users", auth.currentUser.displayName), {
+            liked_movies: [],
+          });
+        });
       })
       .then(() => {
         sendEmailVerification(auth.currentUser);
-      })
-      .then(() => {
-        dispatch({
-          type: "SET_USER",
-          payload: {
-            email: auth.currentUser.email,
-            name: auth.currentUser.displayName,
-            isEmailVerified: auth.currentUser.emailVerified,
-            likedMovies: []
-          },
-        });
-      })
-      .catch((error) => {
-        showModal("Error", "error");
-      })
-      .finally(() => {
-        dispatch({ type: "LOADING_FALSE" });
-      });
-  };
-
-  const login = () => {
-    dispatch({ type: "LOADING_TRUE" });
-
-    signInWithEmailAndPassword(auth, state.email, state.password)
-      .then((user) => {
-        dispatch({
-          type: "SET_USER",
-          payload: {
-            email: user.user.email,
-            name: user.user.displayName,
-            isEmailVerified: user.user.emailVerified,
-          },
-        });
-        showModal("My modal", "My text");
+        showModal("Verification link is sent to your email","please verify it.");
         navigation("/");
       })
-      .catch((error) => {
-        showModal("Not logged in", "error");
-      })
-      .finally(() => {
-        dispatch({ type: "LOADING_FALSE" });
-      });
   };
 
-  const loginWithGoogle = () => {
-    dispatch({ type: "LOADING_TRUE" });
+  const login = (email, password) => {
+    dispatch({type: "AUTH_BEGIN"})
 
-    signInWithPopup(auth, provider)
-      .then((user) => {
-        dispatch({
-          type: "SET_USER",
-          payload: { email: user.user.email, name: user.user.displayName },
-        });
-        reset();
-        showModal("Signed up", "Success");
-
-        navigation("/");
-      })
-      .catch(() => {
-        showModal("Not Signed up", "error");
-      })
-      .finally(() => {
-        dispatch({ type: "LOADING_FALSE" });
-      });
+    signInWithEmailAndPassword(auth, email, password).then(() => {
+      showModal("Success", "Signed in");
+      dispatch({type: "AUTH_SUCCESS",payload: {name: auth.currentUser.displayName,email: auth.currentUser.email, emailVerified: auth.currentUser.emailVerified}})
+      navigation("/");
+    })
   };
 
   const signout = () => {
-    dispatch({ type: "LOADING_TRUE" });
+    dispatch({type: "AUTH_BEGIN"})
 
     signOut(auth)
       .then(() => {
-        dispatch({ type: "SET_USER", payload: {
-          name: '',
-          email: '',
-          isEmailVerified: false,
-          likedMovies: []          
-        }})
-        showModal("Sign out", "success");
+        showModal("Success", "signed out");
+        dispatch({type: "AUTH_SUCCESS",payload: {name: "",email: "",emailVerified: false}})
       })
-      .catch(() => {
-        showModal("Error", "not signed out");
-      })
-      .finally(() => {
-        reset();
-        dispatch({ type: "LOADING_FALSE" });
-      });
   };
-  
+
+  const handleLike = (id, title, img) => {
+    if (!auth.currentUser) {
+      return showModal("Register","Register first")
+    }
+
+    updateDoc(doc(db, "users", state.user.name), {
+      liked_movies: arrayUnion({ id, title, img }),
+    }).then(() => {
+      dispatch({ type: "ADD_LIKED_MOVIE", payload: { id, title, img } });
+    }).catch(()=>{
+      showModal("Error","Error ocurred, try later")
+    });
+  };
+
+  const handleDislike = (id, title, img) => {
+    updateDoc(doc(db, "users", state.user.name), {
+      liked_movies: arrayRemove({ id, title, img }),
+    }).then(() => {
+      dispatch({ type: "REMOVE_LIKED_MOVIE", payload: id });
+    });
+  };
+
   const value = {
-    changeEmail,
-    changePassword,
-    signup,
-    login,
-    loginWithGoogle,
-    changeName,
-    signout,
-    handleLike,
-    state,
+      state,
+      signup,
+      signout,
+      login,
+      handleLike,
+      handleDislike,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

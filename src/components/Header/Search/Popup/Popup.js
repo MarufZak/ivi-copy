@@ -3,11 +3,10 @@ import Form from "./Form/Form";
 import Results from "./Results/Results";
 import {Icon,Loading} from "../../../core";
 import { createPortal } from "react-dom";
-import { useHeaderContext,useGlobalContext } from "../../../../hooks";
+import { useHeaderContext } from "../../../../hooks";
 
 const Popup = () => {
   const { hidePopup } = useHeaderContext();
-  const { state: globalState } = useGlobalContext();
 
   return createPortal(
     <div className={classes.popup}>
