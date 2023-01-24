@@ -4,14 +4,22 @@ import "@splidejs/react-splide/css";
 import "react-loading-skeleton/dist/skeleton.css";
 import "./index.css";
 import App from "./App";
-import { AppProvider } from "./context";
+import { AppProvider, AuthProvider } from "./context";
+import { AuthWrapper } from "./components";
+import { BrowserRouter } from "react-router-dom";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
 root.render(
   <StrictMode>
-    <AppProvider>
-      <App />
-    </AppProvider>
+    <BrowserRouter>
+      <AppProvider>
+        <AuthProvider>
+          <AuthWrapper>
+            <App />
+          </AuthWrapper>
+        </AuthProvider>
+      </AppProvider>
+    </BrowserRouter>
   </StrictMode>
 );

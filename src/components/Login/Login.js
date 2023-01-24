@@ -3,6 +3,7 @@ import useAuthContext from '../../hooks/useAuthContext';
 import { useState } from 'react';
 import { auth } from '../../firebase/firebase';
 import {NotFound} from '../core'
+import { Navigate } from 'react-router-dom';
 
 const Login = () => {
   const [email,setEmail] = useState('');
@@ -18,7 +19,7 @@ const Login = () => {
 
   if (auth.currentUser) {
     console.log(auth.currentUser);
-    return <NotFound />
+    return <Navigate to="/notfound" />
   }
 
   return <div className={classes.login}>

@@ -12,7 +12,7 @@ const initialState = {
   liked_movies_error: false,
   liked_movies: [],
 
-  auth_loading: false,
+  auth_loading: true,
   auth_error: false,
 
   user: {
@@ -92,12 +92,13 @@ const AuthProvider = ({ children }) => {
     const unsubscribe = onAuthStateChanged(auth,(user)=>{
       if (user) {
         dispatch({type: "AUTH_SUCCESS",payload: {name: user.displayName,email: user.email, emailVerified: user.emailVerified}})
+      } else {
+        dispatch({type: "AUTH_SUCCESS",payload: {name: "",email:"",emailVerified: false}})
       }
-    },(error)=>{
+    },()=>{
       dispatch({type: "AUTH_ERROR"})
       showModal("Error","Error in auth")
     })
-
     return ()=>unsubscribe();
   },[])
   
@@ -116,6 +117,7 @@ const AuthProvider = ({ children }) => {
       fetchLikedMovies();
     }
   }, [auth.currentUser]);
+
 
   const signup = (name, email, password) => {
     dispatch({type: "AUTH_BEGIN"})

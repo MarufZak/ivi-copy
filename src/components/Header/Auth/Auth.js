@@ -7,7 +7,6 @@ import { useState } from "react";
 const Auth = () => {
   const [isDropdownActive, setIsDropdownActive] = useState(false);
   const {state} = useAuthContext();
-  console.log(state);
 
   return <>
     {

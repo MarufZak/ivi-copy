@@ -5,6 +5,7 @@ import Popular from './Popular/Popular';
 import Favorite from './Favorite/Favorite';
 import Login from './Login/Login';
 import SignUp from './SignUp/SignUp';
+import AuthWrapper from './core/AuthWrapper';
 
 export {
     Header,
@@ -14,4 +15,5 @@ export {
     Favorite,
     Login,
     SignUp,
+    AuthWrapper
 }
